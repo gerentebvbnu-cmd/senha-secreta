@@ -1,25 +1,65 @@
-# Senha Secreta — preparado para APK Android
+# Senha Secreta
 
-Projeto React + Supabase preparado para empacotamento Android com Capacitor.
+Aplicativo multiplayer para Android (Capacitor) e web, desenvolvido com React, TypeScript, Vite e Supabase.
 
-## Supabase
-O `.env.local` acompanha o projeto com a URL e a chave publishable fornecida. A chave publishable/anon pode ser usada no cliente; nunca use `service_role` ou secret key no aplicativo.
+## Funcionalidades incluídas
 
-## Compilar no Windows
-1. Instale Node.js LTS: https://nodejs.org/
-2. Instale Android Studio: https://developer.android.com/studio
-3. Extraia o ZIP e abra um terminal na pasta.
-4. Execute `npm install`
-5. Execute `npm run build`
-6. Execute `npx cap add android`
-7. Execute `npx cap sync android`
-8. Execute `npx cap open android`
-9. No Android Studio, escolha Build > Build Bundle(s) / APK(s) > Build APK(s).
+- Salas online para 2, 3 ou 4 participantes, com código de acesso.
+- Autenticação anônima do Supabase.
+- Senha secreta individual de quatro dígitos, armazenada no servidor.
+- Desafio automático ao próximo participante na ordem de entrada.
+- Respostas MAIOR, MENOR e ACERTOU.
+- Revelação progressiva dos dígitos descobertos, sem exibir a senha integral.
+- Teclado numérico de 0 a 9.
+- Destaque visual, alerta sonoro e vibração quando chega a vez do jogador.
+- Histórico de tentativas agrupado por rodada.
+- Encerramento imediato da rodada quando a senha é descoberta.
+- Preparação de novas rodadas mantendo a sala, os participantes e os registros anteriores.
+- Atualização em tempo real pelo Supabase Realtime.
 
-APK de depuração: `android/app/build/outputs/apk/debug/app-debug.apk`.
+## Configuração do Supabase
 
-## Compilação em nuvem
-O workflow `.github/workflows/android-apk.yml` compila um APK de depuração no GitHub Actions. Envie o projeto para um repositório GitHub, abra Actions e execute `Build Android APK`. O APK aparecerá como artifact da execução.
+O projeto utiliza estas variáveis de ambiente:
 
-## Limitações desta entrega
-Este ZIP é o projeto preparado para compilação, não um APK compilado. O ambiente desta conversa não possui Android SDK/Gradle instalado para produzir o APK diretamente. O app também precisa de validação funcional com sessões reais antes de ser considerado pronto para lançamento.
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY` (aceita a chave publishable do Supabase)
+
+No GitHub, cadastre ambas em **Settings → Secrets and variables → Actions** com esses nomes exatos. A chave publishable pode estar no aplicativo; nunca coloque uma chave `service_role` ou secret key no frontend.
+
+Os scripts SQL de referência estão em `supabase/`. Eles documentam a estrutura e as funções do backend. Como o banco deste projeto já foi atualizado manualmente durante a configuração, não execute novamente scripts antigos sem revisar o estado atual do banco.
+
+## Enviar para o GitHub
+
+1. Extraia o ZIP.
+2. Abra o repositório `senha-secreta` no GitHub.
+3. Envie os arquivos e pastas que estão dentro de `senha-secreta-android` para a raiz do repositório, substituindo os arquivos antigos.
+4. Faça o commit na branch `main`.
+5. O workflow **Build Android APK** será iniciado automaticamente. Também pode ser iniciado em **Actions → Build Android APK → Run workflow**.
+
+## Baixar o APK
+
+Quando a execução do workflow terminar com sucesso:
+
+1. Abra a execução em **Actions**.
+2. Vá até **Artifacts**.
+3. Baixe `senha-secreta-apk`.
+4. Extraia o arquivo ZIP do artifact. Dentro estará `app-debug.apk`.
+
+Esse APK é para instalação e testes. Para publicar na Google Play, será necessário preparar uma versão de lançamento assinada (AAB).
+
+## Executar localmente
+
+Requer Node.js 22 ou superior.
+
+```bash
+npm install
+npm run dev
+```
+
+Para gerar a versão web:
+
+```bash
+npm run build
+```
+
+O workflow do GitHub Actions prepara a plataforma Android e gera o APK de testes.
